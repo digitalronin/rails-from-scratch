@@ -19,6 +19,8 @@ project without these issues.
 
 ## USAGE
 
+### Create rails application
+
 Build the ruby container and launch a shell:
 
 ```
@@ -28,17 +30,30 @@ make shell
 Then, within the ruby container shell, create your new rails application:
 
 ```
-rails new [project_name] \
-  --database=postgresql \
-  --skip-test \
-  --css=bootstrap
+rails new [project_name] --database=postgresql --skip-test
 ```
+
+### Dockerise
 
 Still within the ruby container shell, add the dockerisation template:
 
 ```
 cd [project_name]
 rails app:template LOCATION='https://railsbytes.com/script/z5OsoB'
+```
+
+### Add Redis (for hotwire)
+
+TODO
+
+### Add makefile
+
+This is required so that we don't have to install ruby and the 'dip' gem in
+order to use the docker development environment.
+
+```
+export PROJECT=$(grep application .dockerdev/compose.yml | sed 's/-.*//' | sed 's/.* //')
+cat ../application-makefile.template | envsubst > makefile
 ```
 
 Now exit the container shell, and create the docker development environment:
@@ -55,10 +70,7 @@ develop your rails application.
 
 # TODO
 
-- add instructions for how to use this without 'dip'
+- get bootstrap working
+- pin bundler to 2.3.11 (to make the evilmartians stuff)
 - pin ruby version with ARG
 - ping rails version with ARG
-
-Get this working, if necessary (no sass installed yet)
-- Add "scripts": { "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules" } to your package.json
-

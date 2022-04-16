@@ -6,7 +6,8 @@ RUN apk add \
   git \
   postgresql-client \
   postgresql-dev \
-  tzdata
+  tzdata \
+  gettext
 
 RUN gem install pg rails rspec
 

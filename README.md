@@ -22,7 +22,6 @@ project without these issues.
 Build the ruby container and launch a shell:
 
 ```
-make build
 make shell
 ```
 

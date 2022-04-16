@@ -1,9 +1,10 @@
 TAG := foo
 
-build:
+.built: Dockerfile
 	docker build -t $(TAG) .
+	touch .built
 
-shell:
+shell: .built
 	docker run --rm \
 		-v $$(pwd):/app \
 		-it $(TAG) bash

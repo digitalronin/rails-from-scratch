@@ -33,6 +33,21 @@ Then, within the ruby container shell, create your new rails application:
 rails new [project_name] --database=postgresql --skip-test
 ```
 
+
+#### Uncomment gems
+
+In the `Gemfile`, uncomment these lines:
+
+```
+# gem "redis", "~> 4.0"
+...
+# gem "bcrypt", "~> 3.1.7"
+...
+# gem "sassc-rails"
+```
+
+...then run `bundle install` to add the gems.
+
 ### Dockerise
 
 Still within the ruby container shell, add the dockerisation template:
@@ -41,10 +56,6 @@ Still within the ruby container shell, add the dockerisation template:
 cd [project_name]
 rails app:template LOCATION='https://railsbytes.com/script/z5OsoB'
 ```
-
-### Add Redis (for hotwire)
-
-TODO
 
 ### Add makefile
 
@@ -56,11 +67,11 @@ export PROJECT=$(grep application .dockerdev/compose.yml | sed 's/-.*//' | sed '
 cat ../application-makefile.template | envsubst > makefile
 ```
 
-Now exit the container shell, and create the docker development environment:
+Now **exit the container shell**, and create the docker development environment:
 
 ```
 cd [project_name]
-dip provision
+make provision
 ```
 
 Commit code changes.

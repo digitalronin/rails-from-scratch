@@ -82,6 +82,4 @@ develop your rails application.
 # TODO
 
 - get bootstrap working
-- pin bundler to 2.3.11 (to make the evilmartians stuff)
 - pin ruby version with ARG
-- ping rails version with ARG

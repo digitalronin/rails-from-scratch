@@ -9,6 +9,14 @@ RUN apk add \
   tzdata \
   gettext
 
-RUN gem install pg rails rspec
+# This is the version of bundler used in the docker development environment
+# template. This ensures that we use the same bundler version for our rails
+# app, which suppresses a warning and an extra installation step.
+# https://evilmartians.com/chronicles/ruby-on-whales-docker-for-ruby-rails-development
+RUN gem install bundler --version 2.3.11
+
+RUN gem install pg rspec
+
+RUN gem install rails --version 7.0.2.3
 
 WORKDIR /app

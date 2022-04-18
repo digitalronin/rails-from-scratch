@@ -8,6 +8,9 @@ up:
 down:
 	$(PREFIX) down
 
+remove-volumes:
+	$(PREFIX) down --volumes
+
 provision:
 	$(PREFIX) down --volumes
 	$(PREFIX) up -d postgres

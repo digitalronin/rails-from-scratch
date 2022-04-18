@@ -1,4 +1,4 @@
-PROJECT := ${PROJECT}
+PROJECT := ${project_name}
 PREFIX := docker compose --file .dockerdev/compose.yml --project-name $(PROJECT)-application
 RAILS := $(PREFIX) run --rm rails rails
 

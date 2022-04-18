@@ -12,6 +12,7 @@ provision:
 	$(PREFIX) down --volumes
 	$(PREFIX) up -d postgres
 	$(PREFIX) run --no-deps --rm rails /bin/bash -c bin/setup
+	$(PREFIX) run --no-deps --rm rails yarn
 
 shell:
 	$(PREFIX) run --rm rails bash

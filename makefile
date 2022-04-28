@@ -1,4 +1,4 @@
-TAG := foo
+TAG := rails-from-scratch
 
 .built: Dockerfile
 	docker build -t $(TAG) .

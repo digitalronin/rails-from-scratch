@@ -50,13 +50,20 @@ shell or rails console prompt, etc.
 
 ### Hotwire
 
-To get hotwire working in development, edit the development section of
-`config/cable.yml` as follows:
+To get hotwire working in development:
+
+1. Edit the development section of `config/cable.yml` as follows:
 
 ```
 development:
   adapter: redis
   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+```
+
+2. Edit `app/views/layouts/application.html.erb` and add this line just before `</head>`:
+
+```
+<%= turbo_include_tags %>
 ```
 
 # TODO

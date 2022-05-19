@@ -1,0 +1,77 @@
+ARG RUBY_VERSION=3.1.2
+ARG DISTRO_NAME=bullseye
+
+FROM ruby:$RUBY_VERSION-slim-$DISTRO_NAME AS base
+
+# Install packages (we need vim for automated credentials editing)
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+    build-essential \
+    vim \
+    curl \
+    gnupg2 \
+    less \
+    git \
+    tzdata \
+    time \
+    locales \
+    postgresql-client \
+    libpq-dev \
+    libpq5
+    # && apt-get clean \
+    # && rm -rf /var/cache/apt/archives/* \
+    # && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    # && truncate -s 0 /var/log/*log
+
+ARG NODE_MAJOR=16
+RUN curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
+RUN apt-get install -yq --no-install-recommends nodejs
+RUN npm install -g yarn
+
+ENV RAILS_ENV=production \
+  LANG=C.UTF-8 \
+  BUNDLE_JOBS=4 \
+  BUNDLE_RETRY=3
+
+# Upgrade RubyGems and install the Bundler version we want
+RUN gem update --system && \
+    gem install bundler --version 2.3.11
+
+# Create and configure a dedicated user (use the same name as for the production-builder image)
+RUN groupadd --gid 1005 my_user \
+  && useradd --uid 1005 --gid my_user --shell /bin/bash --create-home my_user
+RUN mkdir /home/my_user/app
+RUN chown my_user:my_user /home/my_user/app
+
+WORKDIR /home/my_user/app
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --jobs=${BUNDLE_JOBS}
+
+USER my_user
+
+# Install JS packages
+COPY --chown=my_user:my_user package.json yarn.lock ./
+RUN yarn install --check-files
+
+# Copy code
+COPY --chown=my_user:my_user . .
+
+# Build assets
+ARG RAILS_MASTER_KEY
+ENV RAILS_MASTER_KEY=$RAILS_MASTER_KEY
+RUN rails assets:clobber
+RUN rails assets:precompile
+
+# Ruby/Rails env configuration
+ENV RAILS_ENV=production \
+    NODE_ENV=production \
+    RAILS_SERVE_STATIC_FILES=true \
+    RAILS_LOG_TO_STDOUT=true \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
+
+EXPOSE 3000
+
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

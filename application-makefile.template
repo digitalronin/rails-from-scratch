@@ -13,6 +13,7 @@ remove-volumes:
 
 provision:
 	$(PREFIX) down --volumes
+	$(PREFIX) build rails
 	$(PREFIX) up -d postgres
 	$(PREFIX) run --no-deps --rm rails /bin/bash -c bin/setup
 	$(PREFIX) run --no-deps --rm rails yarn

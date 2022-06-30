@@ -21,5 +21,8 @@ provision:
 shell:
 	$(PREFIX) run --rm rails bash
 
+exec:
+	$(PREFIX) exec web bash
+
 rails-c:
 	$(RAILS) console

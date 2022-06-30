@@ -7,7 +7,6 @@ set -euo pipefail
 main() {
   create_rails_app
   cd $PROJECT
-  replace_package_json
   install_gems
   add_docker_template
   fixup_compose_yml
@@ -15,21 +14,15 @@ main() {
   add_makefile
 }
 
-# See [this
-# article](https://jasonfleetwoodboldt.com/courses/stepping-up-rails/rails-7-new-app-with-js-bundling-css-bundling/)
-# for why we specify **both** `--css` and `--javascript` options.
 create_rails_app() {
-  rails new $PROJECT --database=postgresql --css=bootstrap --javascript=esbuild --skip-test
-}
-
-replace_package_json() {
-  cp ../package.json .
+  # This uses tailwindcss-rails (so limited tailwindcss plugins), and
+  # import maps for javascript, so no node/yarn/esbuild
+  rails new $PROJECT --database=postgresql --css=tailwind --skip-test
 }
 
 install_gems() {
   sed -i 's/# gem "redis"/gem "redis"/' Gemfile
   sed -i 's/# gem "bcrypt"/gem "bcrypt"/' Gemfile
-  sed -i 's/# gem "sassc-rails"/gem "sassc-rails"/' Gemfile
   bundle install
 }
 

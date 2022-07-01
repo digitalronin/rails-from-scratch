@@ -6,6 +6,8 @@ RUN apk add \
   git \
   postgresql-client \
   postgresql-dev \
+  sqlite \
+  sqlite-dev \
   tzdata \
   gettext
 

@@ -4,6 +4,16 @@ TAG := rails-from-scratch
 	docker build -t $(TAG) .
 	touch .built
 
+# Usage: PROJECT=foobar make create-rails-app
+create-rails-app: .built
+	docker run --rm \
+		-v $$(pwd):/app \
+		-e PROJECT=$${PROJECT} \
+		$(TAG) ./create-rails-app.sh; \
+	cd $${PROJECT}; \
+	make provision; \
+	git add . ; git commit -m "Initial commit"
+
 shell: .built
 	docker run --rm \
 		-v $$(pwd):/app \

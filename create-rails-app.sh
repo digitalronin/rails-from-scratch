@@ -28,7 +28,7 @@ install_gems() {
 
 # This is interactive
 add_docker_template() {
-  rails app:template LOCATION='https://railsbytes.com/script/z5OsoB'
+  rails app:template LOCATION='https://railsbytes.com/script/xGqsr7'
 }
 
 fixup_compose_yml() {

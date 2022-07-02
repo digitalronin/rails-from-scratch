@@ -24,23 +24,10 @@ project without these issues.
 Build the ruby container and launch a shell:
 
 ```
-make shell
+PROJECT=foobar make create-rails-app
 ```
 
-Then, within the ruby container shell, create your new rails application:
-
-```
-PROJECT=foo-bar ./create-rails-app.sh
-```
-
-When the command has completed, **exit the container shell**, and cd into the new directory:
-
-```
-cd [project_name]
-make provision
-```
-
-Commit code changes.
+This will create a new rails application and "dockerise" it.
 
 At this point, you should be able to use the docker development environment to
 develop your rails application.
